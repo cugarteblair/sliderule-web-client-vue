@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
-DISTRIBUTION_ID := $(shell aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[0]=='client.testsliderule.org'].Id" --output text)
-S3_BUCKET_ROOT := $(shell aws cloudformation describe-stacks --stack-name web-client-stack --region us-east-1 --query "Stacks[0].Outputs[?OutputKey=='S3BucketRoot'].OutputValue" --output text)
+DISTRIBUTION_ID = $(shell aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[0]=='client.testsliderule.org'].Id" --output text)
+S3_BUCKET_ROOT = $(shell aws cloudformation describe-stacks --stack-name web-client-stack --region us-east-1 --query "Stacks[0].Outputs[?OutputKey=='S3BucketRoot'].OutputValue" --output text)
 
 pre-deploy:
 ifndef TEMP_BUCKET
@@ -77,10 +77,10 @@ describe-stacks: ## This is run to describe the stack
 	aws cloudformation describe-stacks --stack-name web-client-stack --region us-east-1
 
 build: ## This is run to build the web client and update the dist folder
-	npm run build
+	cd web-client-vue && npm run build
 
 run: ## This is run to run the web client locally
-	cd web-client && npm start
+	cd web-client-vue && npm run dev
 
 help: ## That's me!
 	@printf "\033[37m%-30s\033[0m %s\n" "#-----------------------------------------------------------------------------------------"
